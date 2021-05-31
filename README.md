@@ -18,3 +18,19 @@ Go言語のBDD用のフレームワークとしてGinkgoを使っているため
 - Go言語のBDD用テストフレームワークである
 - Gomega というMatcherライブラリと組み合わせるのが最適である
     - 但し、Matcherライブラリには依存しない設計となっている
+
+## テストの実行
+```
+ginkgo
+go test
+```
+
+## bootstrapの作成
+```
+ginkgo bootstrap
+```
+
+## Specの追加
+```
+ginkgo generate <ファイル名>
+```

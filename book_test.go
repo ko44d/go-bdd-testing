@@ -38,22 +38,43 @@ var _ = Describe("Book", func() {
 			book Book
 			err  error
 		)
-		BeforeEach(func() {
-			book, err = NewBookFromJSON(`{
+
+		Context("when the JSON parses successfully", func() {
+			BeforeEach(func() {
+				book, err = NewBookFromJSON(`{
             "title":"Les Miserables",
             "author":"Victor Hugo",
             "pages":2783
 			}`)
-		})
+			})
 
-		Context("when the JSON parses successfully", func() {
 			It("should populate the fields correctly", func() {
 				Expect(book.GetTitle()).To(Equal("Les Miserables"))
 				Expect(book.GetAuthor()).To(Equal("Victor Hugo"))
 				Expect(book.GetPages()).To(Equal(int64(2783)))
 			})
+
 			It("should not error", func() {
 				Expect(err).NotTo(HaveOccurred())
+			})
+		})
+
+		Context("when the JSON fails to parse", func() {
+			BeforeEach(func() {
+				book, err = NewBookFromJSON(`{
+                    "title":"Les Miserables",
+                    "author":"Victor Hugo",
+                    "pages":2783oops
+                }`)
+			})
+			It("should return the zero-value for the book", func() {
+				Expect(book.GetTitle()).To(Equal(""))
+				Expect(book.GetAuthor()).To(Equal(""))
+				Expect(book.GetPages()).To(Equal(int64(0)))
+			})
+			It("should error", func() {
+				Expect(err).To(HaveOccurred())
+				Expect(err.Error()).To(Equal("invalid character 'o' after object key:value pair"))
 			})
 		})
 	})

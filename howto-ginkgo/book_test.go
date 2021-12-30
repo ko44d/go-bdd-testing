@@ -1,4 +1,4 @@
-package go_bdd_testing
+package howto_ginkgo
 
 import (
 	. "github.com/onsi/ginkgo"

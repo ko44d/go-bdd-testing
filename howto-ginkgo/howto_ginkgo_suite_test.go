@@ -1,4 +1,4 @@
-package go_bdd_testing_test
+package howto_ginkgo_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestGoBddTesting(t *testing.T) {
+func TestHowtoGinkgo(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "GoBddTesting Suite")
+	RunSpecs(t, "HowtoGinkgo Suite")
 }

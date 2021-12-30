@@ -2,7 +2,7 @@
 テストケースの「動作」説明を記述する
 ```go
 Describe("", func(){
-	
+
 })
 ```
 
@@ -10,20 +10,20 @@ Describe("", func(){
 テストケースの「条件」説明を記述する
 ```go
 Describe("", func(){
-    Context("", func(){
+	Context("", func(){
 	
-    })
+	})
 })
 ```
 ## IT句
 テストケースの「仕様」説明を記述する
 ```go
 Describe("", func(){
-    Context("", func(){
-        It("",func(){
-
-        })
-    })
+	Context("", func(){
+		It("",func(){
+		
+		})
+	})
 })
 
 ```
@@ -34,34 +34,33 @@ Describe("", func(){
 
 ```go
 Describe("", func(){
-    BeforeEach(func(){
-
-    })
-
-    Context("", func(){
-        BeforeEach(func(){
-
-        })
+	BeforeEach(func(){
+	
+	})
+	
+	Context("", func(){
+		BeforeEach(func(){
 		
+		})
 		It("",func(){
-
-        })
-    })
+		
+		})
+	})
 })
 ```
 ## AfterEach句
 テストの最後にクリーンアップするものを記述する
 ```go
 Describe("", func(){
-    BeforeEach(func(){
-
-    })
+	BeforeEach(func(){
 	
-    AfterEach(func(){
+	})
 	
-    })
-
-    Context("", func(){
+	AfterEach(func(){
+	
+	})
+	
+	Context("", func(){
 		BeforeEach(func(){
 		
 		})

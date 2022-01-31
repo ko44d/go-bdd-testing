@@ -1,6 +1,6 @@
-module koyoshid/go-bdd-testing
+module ko44d/go-bdd-testing
 
-go 1.16
+go 1.17
 
 require (
 	github.com/onsi/ginkgo v1.16.3

@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Hello world")
+
+	a := flag.String("first", "hoge", "a is string type")
+
+	flag.Parse()
+
+	fmt.Println(*a)
 }

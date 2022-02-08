@@ -13,17 +13,17 @@ var _ = Describe("Main", func() {
 		err error
 	)
 
-	BeforeSuite(func() {
-		cli, err = gexec.Build("github.com/ko44d/go-bdd-testing/howto-gomega-gexec")
+	BeforeEach(func() {
+		cli, err = gexec.Build(".")
 		Expect(err).ShouldNot(HaveOccurred())
 	})
 
-	AfterSuite(func() {
+	AfterEach(func() {
 		gexec.CleanupBuildArtifacts()
 	})
 	Context("with hoge set in first option", func() {
 		It("return hoge in terminal", func() {
-			command := exec.Command(cli, "-first=hhhhh")
+			command := exec.Command(cli+"/howto-gomega-gexec", "-first hhhhh")
 			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 			session.Wait()
 			Expect(err).ShouldNot(HaveOccurred())

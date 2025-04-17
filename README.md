@@ -91,7 +91,7 @@ Goのテストで外部依存関係をモック化するために、GoMockフレ
 ### インストール方法
 まず、mockgenツールをインストールします：
 ``` bash
-go install github.com/golang/mock/mockgen@latest
+go install go.uber.org/mock/mockgen@latest
 ```
 ### モックの生成方法
 mockgenを使用するには主に2つの方法があります：
@@ -199,9 +199,8 @@ var _ = Describe("UserService", func() {
 - `-aux_files`: 補助ファイルを指定（インターフェースが複数のファイルに分かれている場合）
 - `-self_package`: 生成されたモックコードからオリジナルのパッケージを参照する場合に使用
 
-モックを使用することで、外部依存関係（データベース、APIクライアントなど）を持つコードも確実にテストでき、テストの再現性と信頼性が向上します [[1]](https://github.com/golang/mock)[[2]](https://speedscale.com/blog/getting-started-gomock/)。
+モックを使用することで、外部依存関係（データベース、APIクライアントなど）を持つコードも確実にテストでき、テストの再現性と信頼性が向上します [[1]](https://github.com/uber-go/mock)[[2]](https://speedscale.com/blog/getting-started-gomock/)。
 
 ## 参考リソース
 - [Ginkgo公式ドキュメント](https://onsi.github.io/ginkgo/)
 - [Gomega公式ドキュメント](https://onsi.github.io/gomega/)
-

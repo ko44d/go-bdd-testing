@@ -86,6 +86,122 @@ var _ = Describe("Book", func() {
     })
 })
 ```
+## mockgenを使ったモックファイル作成
+Goのテストで外部依存関係をモック化するために、GoMockフレームワークとmockgenツールが非常に便利です。インターフェースに基づいてモックを自動生成できます。
+### インストール方法
+まず、mockgenツールをインストールします：
+``` bash
+go install github.com/golang/mock/mockgen@latest
+```
+### モックの生成方法
+mockgenを使用するには主に2つの方法があります：
+#### 1. ソースモード：ソースファイルからインターフェースを直接指定
+``` bash
+mockgen -source=<ソースファイルのパス> -destination=<出力先ファイルパス> -package=<パッケージ名>
+```
+例：
+``` bash
+mockgen -source=./repository/user_repository.go -destination=./mocks/mock_user_repository.go -package=mocks
+```
+#### 2. リフレクションモード：パッケージとインターフェース名を指定
+``` bash
+mockgen <パッケージパス> <インターフェース名1>,<インターフェース名2> -destination=<出力先ファイルパス> -package=<パッケージ名>
+```
+例：
+``` bash
+mockgen ko44d/go-bdd-testing/repository UserRepository -destination=./mocks/mock_user_repository.go -package=mocks
+```
+### go:generateを使った自動生成
+コード内に特別なコメントを追加することで、`go generate`コマンドを使用してモックを自動生成できます：
+``` go
+//go:generate mockgen -source=$GOFILE -destination=../mocks/mock_$GOFILE -package=mocks
+```
+このコメントをインターフェースを含むファイルに追加し、以下のコマンドを実行：
+``` bash
+go generate ./...
+```
+### モックの使用例
+モックを使用したテストの例：
+``` go
+func TestWithMock(t *testing.T) {
+    // mockコントローラーの作成
+    ctrl := gomock.NewController(t)
+    defer ctrl.Finish()
+    
+    // モックの作成
+    mockRepo := mocks.NewMockUserRepository(ctrl)
+    
+    // モックの振る舞いを定義
+    mockRepo.EXPECT().
+        GetUserByID(gomock.Eq(1)).
+        Return(&models.User{ID: 1, Name: "テストユーザー"}, nil)
+    
+    // テスト対象のサービスにモックを注入
+    service := NewUserService(mockRepo)
+    
+    // テスト実行
+    user, err := service.GetUser(1)
+    
+    // 結果の検証
+    assert.NoError(t, err)
+    assert.Equal(t, "テストユーザー", user.Name)
+}
+```
+### Ginkgoとの組み合わせ
+GoMockはGinkgoと組み合わせて使用することもできます：
+``` go
+var _ = Describe("UserService", func() {
+    var (
+        mockCtrl *gomock.Controller
+        mockRepo *mocks.MockUserRepository
+        service  *UserService
+    )
+    
+    BeforeEach(func() {
+        mockCtrl = gomock.NewController(GinkgoT())
+        mockRepo = mocks.NewMockUserRepository(mockCtrl)
+        service = NewUserService(mockRepo)
+    })
+    
+    AfterEach(func() {
+        mockCtrl.Finish()
+    })
+    
+    Context("GetUser", func() {
+        It("正常にユーザーを取得できること", func() {
+            mockRepo.EXPECT().
+                GetUserByID(gomock.Eq(1)).
+                Return(&models.User{ID: 1, Name: "テストユーザー"}, nil)
+                
+            user, err := service.GetUser(1)
+            
+            Expect(err).NotTo(HaveOccurred())
+            Expect(user.Name).To(Equal("テストユーザー"))
+        })
+        
+        It("ユーザーが存在しない場合はエラーを返すこと", func() {
+            mockRepo.EXPECT().
+                GetUserByID(gomock.Any()).
+                Return(nil, errors.New("user not found"))
+                
+            _, err := service.GetUser(999)
+            
+            Expect(err).To(HaveOccurred())
+            Expect(err.Error()).To(Equal("user not found"))
+        })
+    })
+})
+```
+### mockgenの便利なオプション
+- `-mock_names`: モック名をカスタマイズ（例：`-mock_names=UserRepository=MockUserRepo`）
+- `-copyright_file`: 著作権表示を含むファイルを指定
+- `-imports`: 追加のインポートを指定
+- `-aux_files`: 補助ファイルを指定（インターフェースが複数のファイルに分かれている場合）
+- `-self_package`: 生成されたモックコードからオリジナルのパッケージを参照する場合に使用
+
+モックを使用することで、外部依存関係（データベース、APIクライアントなど）を持つコードも確実にテストでき、テストの再現性と信頼性が向上します [[1]](https://github.com/golang/mock)[[2]](https://speedscale.com/blog/getting-started-gomock/)。
+
 ## 参考リソース
 - [Ginkgo公式ドキュメント](https://onsi.github.io/ginkgo/)
 - [Gomega公式ドキュメント](https://onsi.github.io/gomega/)
+

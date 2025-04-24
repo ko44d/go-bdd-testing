@@ -24,12 +24,16 @@ var _ = Describe("Main", func() {
 	AfterEach(func() {
 		gexec.CleanupBuildArtifacts()
 	})
+
 	Context("with hoge set in first option", func() {
 		It("return hoge in terminal", func() {
-			command := exec.Command(cliPath, "-first hhhhh")
+			command := exec.Command(cliPath, "-first", "hhhhh")
 			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
-			session.Wait()
 			Expect(err).ShouldNot(HaveOccurred())
+
+			session.Wait()
+			Expect(session.ExitCode()).To(Equal(0))
+			Expect(session.Out.Contents()).To(ContainSubstring("hhhhh"))
 		})
 	})
 })

@@ -1,71 +1,77 @@
 ## Describe句
-テストケースの「動作」説明を記述する
+テスト対象の「動作」や機能全体を表すブロック。トップレベルの説明単位として用いられる。
+
 ```go
-Describe("", func(){
+Describe("対象の説明", func() {
 
 })
 ```
 
 ## Context句
-テストケースの「条件」説明を記述する
+前提条件やシナリオの違いを明確にするためのブロック。Describe内にネストして使用する。
+
 ```go
-Describe("", func(){
-	Context("", func(){
+Describe("機能", func() {
+	Context("特定の条件下", func() {
 	
 	})
 })
 ```
-## IT句
-テストケースの「仕様」説明を記述する
+
+## It句
+「期待する振る舞い（仕様）」を具体的に記述する。1つのテストケースを表す最小単位。
+
 ```go
-Describe("", func(){
-	Context("", func(){
-		It("",func(){
+Describe("機能", func() {
+	Context("特定の条件下", func() {
+		It("期待される動作を説明", func() {
 		
 		})
 	})
 })
-
 ```
+
 ## BeforeEach句
-- テストコード間での共通設定を記述する
-- テストメソッド実行前の準備について記述する
-- ブロック内でのアサーションを配置することは一般的である。なぜなら、テスト実行前の準備中にエラーが発生しないかチェックするため。
+- 各テスト実行前に毎回実行される処理を定義する。
+- 共通の初期化処理や前提データのセットアップに使用。
+- アサーションを含めることで、準備段階でのエラーも検知可能。
 
 ```go
-Describe("", func(){
-	BeforeEach(func(){
+Describe("機能", func() {
+	BeforeEach(func() {
 	
 	})
 	
-	Context("", func(){
-		BeforeEach(func(){
+	Context("特定の条件下", func() {
+		BeforeEach(func() {
 		
 		})
-		It("",func(){
+		It("期待される動作", func() {
 		
 		})
 	})
 })
 ```
+
 ## AfterEach句
-テストの最後にクリーンアップするものを記述する
+各テスト実行後に呼び出されるクリーンアップ処理を記述する。
+
 ```go
-Describe("", func(){
-	BeforeEach(func(){
+Describe("機能", func() {
+	BeforeEach(func() {
 	
 	})
 	
-	AfterEach(func(){
+	AfterEach(func() {
 	
 	})
 	
-	Context("", func(){
-		BeforeEach(func(){
+	Context("特定の条件下", func() {
+		BeforeEach(func() {
 		
 		})
 		
-		It("",func(){
+		It("期待される動作", func() {
 			
 		})
 	})

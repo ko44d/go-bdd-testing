@@ -1,4 +1,4 @@
-name: pull-request.yml
+name: Test
 on:
   pull_request:
     paths: ['go/**/*.go']

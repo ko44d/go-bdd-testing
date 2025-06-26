@@ -4,7 +4,7 @@ on:
     paths:
     - '**/*.go'
     - 'go.mod'
-    - 'go.sum''
+    - 'go.sum'
 
 jobs:
   test:
